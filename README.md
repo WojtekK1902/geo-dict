@@ -1,0 +1,4 @@
+geo-dict
+========
+
+Geolocalized dictionaries
