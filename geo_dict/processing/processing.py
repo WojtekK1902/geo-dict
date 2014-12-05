@@ -3,20 +3,20 @@ import re
 import os
 import itertools
 
-from geo_dict.common import stoplist
+from geo_dict.common.stoplist import stoplist
 from geo_dict.common import geo_relations_prepositions
 from geo_dict.common.diacritic_letters import diacritic_letters
 from geo_dict.common.levenshtein import lev_dist
 from geo_dict.postgis import streets_relations
-from geo_dict.postgis.streets_relations import relation_3, relation_4
+from geo_dict.postgis.streets_relations import relation_1, relation_2, relation_3, relation_4
 
 
 def process(text):
-    text = text.decode('utf-8').strip().lower()
+    text = text.strip().lower()
 
     words = [w for w in re.findall(r'\w+', text, re.U) if w not in stoplist]
 
-    all_streets = prepare_streets(os.path.join('data', 'streets.txt'))
+    all_streets = prepare_streets(os.environ['STREETS_DATA'])
     streets = find_streets(words, all_streets)
 
     if streets:
@@ -34,12 +34,12 @@ def process(text):
                     offset = 0
 
                 if has_preposition(words[:offset], geo_relations_prepositions.relation_4):
-                    coords = streets_relations.relation_4.gis(c[0][0], c[0][1])
+                    coords = streets_relations.relation_4.gis(c[0][0], c[1][0])
                     if coords:
                         return coords
 
                 if has_preposition(words[:offset], geo_relations_prepositions.relation_3):
-                    coords = streets_relations.relation_3.gis(c[0][0], c[0][1])
+                    coords = streets_relations.relation_3.gis(c[0][0], c[1][0])
                     if coords:
                         return coords
 
