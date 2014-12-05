@@ -3,7 +3,7 @@ import psycopg2
 import os
 
 
-def gis(street_name1):
+def gis(street_name):
     conn = psycopg2.connect(
         'dbname = ' + os.environ['DBNAME'] + ' user = ' + os.environ['DBUSER'] + ' port = ' + os.environ['DBPORT'])
 
@@ -11,7 +11,7 @@ def gis(street_name1):
 
     cur.execute("""SELECT geom FROM nodes
 WHERE id IN (SELECT node_id FROM way_nodes WHERE way_id IN
-(SELECT way_id FROM way_tags WHERE k LIKE 'name' AND lower(v) LIKE '""" + street_name1.lower() + """'))""")
+(SELECT way_id FROM way_tags WHERE k LIKE 'name' AND lower(v) LIKE '""" + street_name.lower() + """'))""")
 
     row = cur.fetchall()
 
