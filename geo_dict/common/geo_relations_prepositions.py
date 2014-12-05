@@ -1,3 +1,4 @@
+# coding=utf-8
 
 relation_1 = [u'na', u'we', u'w', u'wewnątrz']
 relation_2 = [u'za', u'wzdłuż', u'koło', u'przy', u'obok', u'naprzeciwko', u'przed', u'nad', u'pod', u'ponad', u'poza']
