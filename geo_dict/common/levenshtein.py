@@ -1,3 +1,5 @@
+# coding=utf-8
+
 def lev_dist(s1, s2):
     l1, l2 = len(s1), len(s2)
     diacr = {u'ą':'a', u'ć':'c', u'ę':'e', u'ł':'l', u'ń':'n', u'ó':'o', u'ś':'s', u'ż':'z', u'ź':'z'}

@@ -1,3 +1,5 @@
+# coding=utf-8
+
 stoplist = [u'a', u'aby', u'ach', u'acz', u'aczkolwiek', u'aj', u'albo', u'ale', u'ależ', u'ani', u'aż', u'bardziej',
             u'bardzo', u'bo', u'bowiem', u'by', u'byli', u'bynajmniej', u'być', u'był', u'była', u'było', u'były',
             u'będzie', u'będą', u'cali', u'cała', u'cały', u'ci', u'cię', u'ciebie', u'co', u'cokolwiek', u'coś',
