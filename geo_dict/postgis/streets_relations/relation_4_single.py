@@ -32,4 +32,4 @@ WHERE way_id IN (SELECT way_id FROM way_tags WHERE k LIKE 'name' AND lower(v) NO
     cur.close()
     conn.close()
 
-    return (mean(ys), mean(xs))
+    return zip(ys, xs)
