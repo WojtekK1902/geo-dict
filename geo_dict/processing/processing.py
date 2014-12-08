@@ -1,4 +1,5 @@
 import codecs
+from operator import itemgetter
 import re
 import os
 import itertools
@@ -18,6 +19,8 @@ def process(text):
 
     all_streets = prepare_streets(os.environ['STREETS_DATA'])
     streets = find_streets(words, all_streets)
+
+    print streets
 
     if streets:
         shift = 5
@@ -88,8 +91,8 @@ def find_streets(words, all_streets):
                                or (s[0] in diacritic_letters and diacritic_letters[s[0]] == w[0])]
         for s in streets_same_letter:
             if lev_dist(w, s) < 1.5:
-                streets.append((s, i))
-    return streets
+                streets.append((all_streets[s], i))
+    return sorted(streets, key=itemgetter(1))
 
 
 def has_preposition(words, relation_prepositions):
