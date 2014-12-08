@@ -21,9 +21,8 @@ WHERE id IN (SELECT node_id FROM node_tags WHERE k LIKE 'name' AND lower(v) LIKE
         y = cur.fetchone()[0]
         ys.append(float(y))
 
-
     cur.close()
     conn.close()
 
-    return mean(ys), mean(xs)
+    return zip(ys, xs)
 
