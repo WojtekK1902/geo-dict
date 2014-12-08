@@ -1,11 +1,10 @@
 from numpy import mean
-import psycopg2
-import os
+
+from geo_dict.postgis.connection import connect
 
 
 def gis(node_name1, node_name2):
-    conn = psycopg2.connect(
-        'dbname = ' + os.environ['DBNAME'] + ' user = ' + os.environ['DBUSER'] + ' port = ' + os.environ['DBPORT'])
+    conn = connect()
 
     cur = conn.cursor()
 
