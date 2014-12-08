@@ -1,10 +1,8 @@
-import psycopg2
-import os
+from geo_dict.postgis.connection import connect
 
 
 def process_street(street_name):
-    conn = psycopg2.connect(
-        'dbname = ' + os.environ['DBNAME'] + ' user = ' + os.environ['DBUSER'] + ' port = ' + os.environ['DBPORT'])
+    conn = connect()
 
     cur = conn.cursor()
 
