@@ -9,8 +9,9 @@ from geo_dict.common.stoplist import stoplist
 from geo_dict.common import geo_relations_prepositions
 from geo_dict.common.diacritic_letters import diacritic_letters
 from geo_dict.common.levenshtein import lev_dist
-from geo_dict.postgis import streets_relations, nodes_relations
+from geo_dict.postgis import streets_relations, nodes_relations, nodes_streets_relations
 from geo_dict.postgis.nodes_relations import relation_1, relation_2, relation_3
+from geo_dict.postgis.nodes_streets_relations import relation_3
 from geo_dict.postgis.streets_relations import relation_1, relation_2, relation_3, relation_4, relation_4_single
 
 
@@ -56,20 +57,60 @@ def process(text):
                     # We look for some additional information
                     places_coords = []
                     for p in places:
-                        places_coords.extend(nodes_relations.relation_1.gis(p))
+                        places_coords.extend(nodes_relations.relation_2.gis(p[0]))
 
                     common_coords = list(set(coords).intersection(places_coords))
                     if common_coords:
                         return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
                     return coords
 
+            if has_preposition(words[:s[1]-shift], geo_relations_prepositions.relation_3):
+                if places:
+                    coords = nodes_streets_relations.relation_3.gis(s[0], places[0][0])
+                    if coords:
+                        return coords
+
             if has_preposition(words[:s[1]-shift], geo_relations_prepositions.relation_2):
                 coords = streets_relations.relation_2.gis(s[0])
                 if coords:
+                    # We look for some additional information
+                    places_coords = []
+                    for p in places:
+                        places_coords.extend(nodes_relations.relation_2.gis(p[0]))
+
+                    common_coords = list(set(coords).intersection(places_coords))
+                    if common_coords:
+                        return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
                     return coords
 
             if has_preposition(words[:s[1]-shift], geo_relations_prepositions.relation_1):
                 coords = streets_relations.relation_1.gis(s[0])
+                if coords:
+                    # We look for some additional information
+                    places_coords = []
+                    for p in places:
+                        places_coords.extend(nodes_relations.relation_2.gis(p[0]))
+
+                    common_coords = list(set(coords).intersection(places_coords))
+                    if common_coords:
+                        return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
+                    return coords
+
+    if places:
+        if has_preposition(words[:places[0][1]-shift], geo_relations_prepositions.relation_3):
+            coords = nodes_relations.relation_3.gis(places[0][0], places[0][1])
+            if coords:
+                return coords
+
+        for p in places:
+            if has_preposition(words[:p[1]-shift], geo_relations_prepositions.relation_2):
+                coords = nodes_relations.relation_2.gis(p[0])
+                if coords:
+                    return coords
+
+        for p in places:
+            if has_preposition(words[:p[1]-shift], geo_relations_prepositions.relation_1):
+                coords = nodes_relations.relation_1.gis(p[0])
                 if coords:
                     return coords
 
