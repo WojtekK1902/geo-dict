@@ -34,5 +34,5 @@ WHERE id IN (SELECT node_id FROM node_tags WHERE k LIKE 'name' AND lower(v) LIKE
     cur.close()
     conn.close()
 
-    return mean(ys), mean(xs)
+    return zip(ys, xs)
 

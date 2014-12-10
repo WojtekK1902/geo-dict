@@ -81,4 +81,4 @@ ST_GeomFromText('SRID=26986;POLYGON((""" + points + """))'));""")
     cur.close()
     conn.close()
 
-    return mean(ys), mean(xs)
+    return zip(ys, xs)

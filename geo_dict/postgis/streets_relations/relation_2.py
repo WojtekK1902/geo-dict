@@ -35,4 +35,4 @@ WHERE id IN (SELECT node_id FROM way_nodes WHERE way_id IN
     cur.close()
     conn.close()
 
-    return mean(ys), mean(xs)
+    return zip(ys, xs)

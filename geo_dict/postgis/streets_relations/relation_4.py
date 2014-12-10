@@ -25,4 +25,4 @@ AND node_id IN
     cur.close()
     conn.close()
 
-    return float(y), float(x)
+    return [(float(y), float(x))]
