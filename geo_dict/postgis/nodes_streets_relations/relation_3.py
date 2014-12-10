@@ -49,4 +49,4 @@ WHERE ST_Within(ST_Transform(geom, 26986), ST_GeomFromText('SRID=26986;POLYGON((
     cur.close()
     conn.close()
 
-    return mean(ys), mean(xs)
+    return zip(ys, xs)
