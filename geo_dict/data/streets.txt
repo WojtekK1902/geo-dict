@@ -45,7 +45,7 @@ Aleja Juliusza Słowackiego
 Aleja Jurajska
 Aleja Kasy Oszczędności Miasta Krakowa
 Aleja Kasztanowa
-Aleja Kijowska
+Aleja Kijowska;Alei Kijowskiej;Aleją Kijowską
 Aleja Mieczysława Małeckiego
 Aleja Modrzewiowa
 Aleja Pod Kopcem

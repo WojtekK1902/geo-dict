@@ -16,7 +16,7 @@ WHERE id IN (SELECT node_id FROM node_tags WHERE k LIKE 'name' AND lower(v) LIKE
         # SRID needs to be changed to 2163 - http://forum.geonames.org/gforum/posts/list/727.page
         # http://www.nationalatlas.gov/articles/mapping/a_projections.html
         cur.execute("""SELECT id FROM nodes WHERE ST_DWithin(ST_Transform(geom, 2163), ST_Transform('""" + r[0]
-                    + """', 2163) ,10)""")
+                    + """'::text, 2163) ,10)""")
         result = cur.fetchall()
         for res in result:
             cur.execute("""SELECT geom FROM nodes where id = """ + str(res[0]))
