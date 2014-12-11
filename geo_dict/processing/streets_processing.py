@@ -16,25 +16,31 @@ def process(words, streets, places):
         combinations = itertools.combinations(streets, 2)  # If there are more than a pair of streets, we should
         # check all the combinations
         for c in combinations:
-            if c[0][1] < c[1][1]:
-                offset = c[0][1] - shift
+            if c[0][2] < c[1][2]:
+                left = c[0][2] - shift
+                right = c[1][2] + shift
             else:
-                offset = c[1][1] - shift
-            if offset < 0:
-                offset = 0
+                left = c[1][2] - shift
+                right = c[0][2] + shift
+            if left < 0:
+                left = 0
 
-            if has_preposition(words[:offset], geo_relations_prepositions.relation_4):
+            if has_preposition(words[left:right], geo_relations_prepositions.relation_4):
                 coords = streets_relations.relation_4.gis(c[0][0], c[1][0])
                 if coords:
                     return coords
 
-            if has_preposition(words[:offset], geo_relations_prepositions.relation_3):
+            if has_preposition(words[left:right], geo_relations_prepositions.relation_3):
                 coords = streets_relations.relation_3.gis(c[0][0], c[1][0])
                 if coords:
                     return coords
 
     for s in streets:
-        if has_preposition(words[:s[1] - shift], geo_relations_prepositions.relation_4):
+        left = s[2] - shift
+        if left < 0:
+            left = 0
+
+        if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_4):
             coords = streets_relations.relation_4_single.gis(s[0])
             if coords:
                 # We look for some additional information
@@ -47,13 +53,13 @@ def process(words, streets, places):
                     return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
                 return coords
 
-        if has_preposition(words[:s[1] - shift], geo_relations_prepositions.relation_3):
+        if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_3):
             if places:
                 coords = nodes_streets_relations.relation_3.gis(s[0], places[0][0])
                 if coords:
                     return coords
 
-        if has_preposition(words[:s[1] - shift], geo_relations_prepositions.relation_2):
+        if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_2):
             coords = streets_relations.relation_2.gis(s[0])
             if coords:
                 # We look for some additional information
@@ -66,7 +72,7 @@ def process(words, streets, places):
                     return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
                 return coords
 
-        if has_preposition(words[:s[1] - shift], geo_relations_prepositions.relation_1):
+        if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_1):
             coords = streets_relations.relation_1.gis(s[0])
             if coords:
                 # We look for some additional information
