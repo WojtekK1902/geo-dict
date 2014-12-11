@@ -43,16 +43,16 @@ def process_street(street_name):
             geom1 = cur.fetchone()
             cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(r[0][-1]) + """;""")
             geom2 = cur.fetchone()
-            cur.execute("""SELECT ST_Distance(ST_Transform('""" + geom1[0] + """',26986),ST_Transform('""" + geom2[
-                0] + """',26986));""")
+            cur.execute("""SELECT ST_Distance(ST_Transform('""" + geom1[0] + """'::text,26986),ST_Transform('""" + geom2[
+                0] + """'::text,26986));""")
             dist1 = cur.fetchone()
 
             cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(r[1][0]) + """;""")
             geom1 = cur.fetchone()
             cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(r[1][-1]) + """;""")
             geom2 = cur.fetchone()
-            cur.execute("""SELECT ST_Distance(ST_Transform('""" + geom1[0] + """',26986),ST_Transform('""" + geom2[
-                0] + """',26986));""")
+            cur.execute("""SELECT ST_Distance(ST_Transform('""" + geom1[0] + """'::text,26986),ST_Transform('""" + geom2[
+                0] + """'::text,26986));""")
             dist2 = cur.fetchone()
             if dist1[0] > dist2[0]:
                 way_parts.remove(r[1])
@@ -106,8 +106,8 @@ def process_street(street_name):
                     cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(ways[j][0]) + """;""")
                     geom2 = cur.fetchone()
                     cur.execute(
-                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """',26986),ST_Transform('""" + geom2[
-                            0] + """',26986));""")
+                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """'::text,26986),ST_Transform('""" + geom2[
+                            0] + """'::text,26986));""")
                     dist = cur.fetchone()
                     d[dist] = (i, j, False, False)
 
@@ -116,8 +116,8 @@ def process_street(street_name):
                     cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(ways[j][-1]) + """;""")
                     geom2 = cur.fetchone()
                     cur.execute(
-                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """',26986),ST_Transform('""" + geom2[
-                            0] + """',26986));""")
+                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """'::text,26986),ST_Transform('""" + geom2[
+                            0] + """'::text,26986));""")
                     dist = cur.fetchone()
                     d[dist] = (i, j, False, True)
 
@@ -126,8 +126,8 @@ def process_street(street_name):
                     cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(ways[j][0]) + """;""")
                     geom2 = cur.fetchone()
                     cur.execute(
-                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """',26986),ST_Transform('""" + geom2[
-                            0] + """',26986));""")
+                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """'::text,26986),ST_Transform('""" + geom2[
+                            0] + """'::text,26986));""")
                     dist = cur.fetchone()
                     d[dist] = (i, j, True, False)
 
@@ -136,8 +136,8 @@ def process_street(street_name):
                     cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(ways[j][-1]) + """;""")
                     geom2 = cur.fetchone()
                     cur.execute(
-                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """',26986),ST_Transform('""" + geom2[
-                            0] + """',26986));""")
+                        """SELECT ST_Distance(ST_Transform('""" + geom1[0] + """'::text,26986),ST_Transform('""" + geom2[
+                            0] + """'::text,26986));""")
                     dist = cur.fetchone()
                     d[dist] = (i, j, True, True)
 
