@@ -1,5 +1,3 @@
-from numpy import mean
-
 from geo_dict.postgis.connection import connect
 from helpers.helpers import process_street
 
@@ -18,9 +16,9 @@ def gis(street_name1, street_name2):
     for n in way1:
         cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(n) + """;""")
         point = cur.fetchone()[0]
-        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         x = cur.fetchone()[0]
-        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         y = cur.fetchone()[0]
         points1 += str(x) + ' ' + str(y) + ', '
 
@@ -29,26 +27,26 @@ def gis(street_name1, street_name2):
     for n in way2:
         cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(n) + """;""")
         point = cur.fetchone()[0]
-        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         x = cur.fetchone()[0]
-        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         y = cur.fetchone()[0]
         points1 += str(x) + ' ' + str(y) + ', '
 
     for i in range(len(way2) - 1, -1, -1):
         cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(way2[i]) + """;""")
         point = cur.fetchone()[0]
-        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         x = cur.fetchone()[0]
-        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         y = cur.fetchone()[0]
         points2 += str(x) + ' ' + str(y) + ', '
 
     cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(way1[0]) + """;""")
     point = cur.fetchone()[0]
-    cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+    cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
     x = cur.fetchone()[0]
-    cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+    cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
     y = cur.fetchone()[0]
 
     points1 += str(x) + ' ' + str(y)

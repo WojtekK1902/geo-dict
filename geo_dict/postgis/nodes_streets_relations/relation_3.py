@@ -1,5 +1,3 @@
-from numpy import mean
-
 from geo_dict.postgis.connection import connect
 from helpers.helpers import process_street
 
