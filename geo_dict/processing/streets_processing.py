@@ -1,12 +1,13 @@
 import itertools
+
 import numpy as np
 
 from geo_dict.common import geo_relations_prepositions
+from geo_dict.common.geo_relations_prepositions import has_preposition
 from geo_dict.postgis import streets_relations, nodes_relations, nodes_streets_relations
 from geo_dict.postgis.nodes_relations import relation_2
 from geo_dict.postgis.nodes_streets_relations import relation_3
 from geo_dict.postgis.streets_relations import relation_1, relation_2, relation_3, relation_4, relation_4_single
-from geo_dict.processing.processing import has_preposition
 
 
 def process(words, streets, places):

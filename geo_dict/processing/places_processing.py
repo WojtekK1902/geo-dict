@@ -1,5 +1,5 @@
 from geo_dict.common import geo_relations_prepositions
-from geo_dict.processing.processing import has_preposition
+from geo_dict.common.geo_relations_prepositions import has_preposition
 
 from geo_dict.postgis import nodes_relations
 from geo_dict.postgis.nodes_relations import relation_1, relation_2, relation_3

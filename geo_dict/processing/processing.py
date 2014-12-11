@@ -88,11 +88,3 @@ def find_places(words, all_places):
             if dist < 2.5:
                 places.append((p, dist, i))
     return sorted(places, key=itemgetter(1, 2))  # Sort by Levenshtein distance, then by location in text
-
-
-def has_preposition(words, relation_prepositions):
-    for prep in relation_prepositions:
-        for word in words:
-            if lev_dist(word, prep) <= 0.75:
-                return True
-    return False
