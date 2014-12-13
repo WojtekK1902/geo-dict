@@ -79,7 +79,15 @@ def find_streets(words, all_streets):
 
 
 def find_places(words, all_places):
-    places = []
+    """
+    :param words:
+    :param all_places:
+    :return: List of tuples with potential places names. Each tuple consists of:
+     * place name,
+     * Levenshtein distance between the place name and the word in a text recognized as this name
+     * and this word's location in text
+    """
+    places = {}  # key - word in text, value - tuple, see info about return value
     for i, w in enumerate(words):
         # Let's limit potential place names to the ones that begin with the same letter as the given word
         places_same_letter = [p for p in all_places if p[0] == w[0]
@@ -87,5 +95,6 @@ def find_places(words, all_places):
         for p in places_same_letter:
             dist = lev_dist(w, p)
             if dist < 2.5:
-                places.append((p, dist, i))
-    return sorted(places, key=itemgetter(1, 2))  # Sort by Levenshtein distance, then by location in text
+                if w not in places or (p in places and places[p][1] > dist):
+                    places[w] = (p, dist, i)
+    return sorted(places.values(), key=itemgetter(1, 2))  # Sort by Levenshtein distance, then by location in text
