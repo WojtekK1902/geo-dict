@@ -15,7 +15,9 @@ from geo_dict.common.distance import calculate_distance
 def process(words, streets, places):
     shift = 5
 
-    if len(streets) > 2:
+    print streets
+
+    if len(streets) >= 2:
         combinations = itertools.combinations(streets, 2)  # If there are more than a pair of streets, we should
         # check all the combinations
         for c in combinations:
@@ -57,6 +59,7 @@ def process(words, streets, places):
                 return coords
 
         if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_3):
+            print 'tu'
             if places:
                 coords = nodes_streets_relations.relation_3.gis(s[0], places[0][0])
                 if coords:
