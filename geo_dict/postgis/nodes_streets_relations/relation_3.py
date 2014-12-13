@@ -23,9 +23,9 @@ WHERE id IN (SELECT node_id FROM node_tags WHERE k LIKE 'name' AND lower(v) LIKE
     for n in way1:
         cur.execute("""SELECT geom FROM nodes WHERE id = """ + str(n) + """;""")
         point = cur.fetchone()[0]
-        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_X(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         x = cur.fetchone()[0]
-        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """',26986)));""")
+        cur.execute("""SELECT ST_Y(ST_AsText(ST_Transform('""" + point + """'::text,26986)));""")
         y = cur.fetchone()[0]
         points_way1 += str(x) + ' ' + str(y) + ', '
 
