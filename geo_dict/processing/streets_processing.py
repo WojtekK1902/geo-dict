@@ -15,8 +15,6 @@ from geo_dict.common.distance import calculate_distance
 def process(words, streets, places):
     shift = 5
 
-    print streets
-
     if len(streets) >= 2:
         combinations = itertools.combinations(streets, 2)  # If there are more than a pair of streets, we should
         # check all the combinations
@@ -51,7 +49,7 @@ def process(words, streets, places):
                 # We look for some additional information
                 additional_coords = []
                 for p in places:
-                    additional_coords.extend(nodes_relations.relation_1.gis(p[0]))
+                    additional_coords.extend(nodes_relations.relation_2.gis(p[0]))
 
                 if additional_coords:
                     return [min([(calculate_distance(c1[0], c1[1], c2[0], c2[1]), (c1[0], c1[1]))
@@ -59,7 +57,6 @@ def process(words, streets, places):
                 return coords
 
         if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_3):
-            print 'tu'
             if places:
                 coords = nodes_streets_relations.relation_3.gis(s[0], places[0][0])
                 if coords:
@@ -73,9 +70,9 @@ def process(words, streets, places):
                 for p in places:
                     additional_coords.extend(nodes_relations.relation_2.gis(p[0]))
 
-                common_coords = list(set(coords).intersection(additional_coords))
-                if common_coords:
-                    return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
+                if additional_coords:
+                    return [min([(calculate_distance(c1[0], c1[1], c2[0], c2[1]), (c1[0], c1[1]))
+                                for c2 in additional_coords for c1 in coords], key=itemgetter(0))[1]]
                 return coords
 
         if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_1):
