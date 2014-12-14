@@ -29,6 +29,6 @@ stoplist = [u'a', u'aby', u'ach', u'acz', u'aczkolwiek', u'aj', u'albo', u'ale',
             u'twoim', u'twoja', u'twoje', u'twym', u'twój', u'twoj', u'ty', u'tych', u'tylko', u'tym', u'u', u'wam',
             u'wami', u'was', u'wasz', u'wasza', u'wasze', u'według', u'wedlug', u'wiele', u'wielu', u'więc', u'wiec',
             u'więcej', u'wiecej', u'wszyscy', u'wszystkich', u'wszystkie', u'wszystkim', u'wszystko', u'wtedy',
-            u'wy', u'właśnie', u'wlasnie', u'z', u'zapewne', u'zawsze', u'ze', u'zł', u'znowu', u'znów', u'znow',
-            u'został', u'zostal', u'żaden', u'zaden', u'żadna', u'zadna' u'żadne', u'zadne', u'żadnych', u'zadnych',
-            u'że', u'żeby', u'zeby']
+            u'wy', u'właśnie', u'wlasnie', u'zapewne', u'zawsze', u'ze', u'zł', u'znowu', u'znów', u'znow', u'został',
+            u'zostal', u'żaden', u'zaden', u'żadna', u'zadna' u'żadne', u'zadne', u'żadnych', u'zadnych', u'że',
+            u'żeby', u'zeby']

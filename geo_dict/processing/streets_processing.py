@@ -1,8 +1,6 @@
 import itertools
 from operator import itemgetter
 
-import numpy as np
-
 from geo_dict.common import geo_relations_prepositions
 from geo_dict.common.geo_relations_prepositions import has_preposition
 from geo_dict.postgis import streets_relations, nodes_relations, nodes_streets_relations
@@ -62,7 +60,7 @@ def process(words, streets, places):
                 if coords:
                     return coords
 
-        if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_2):
+        if has_preposition(words[left:s[2]], geo_relations_prepositions.relation_2):
             coords = streets_relations.relation_2.gis(s[0])
             if coords:
                 # We look for some additional information
@@ -75,7 +73,7 @@ def process(words, streets, places):
                                 for c2 in additional_coords for c1 in coords], key=itemgetter(0))[1]]
                 return coords
 
-        if has_preposition(words[left:s[2]+shift], geo_relations_prepositions.relation_1):
+        if has_preposition(words[left:s[2]], geo_relations_prepositions.relation_1):
             coords = streets_relations.relation_1.gis(s[0])
             if coords:
                 # We look for some additional information
@@ -83,7 +81,7 @@ def process(words, streets, places):
                 for p in places:
                     additional_coords.extend(nodes_relations.relation_2.gis(p[0]))
 
-                common_coords = list(set(coords).intersection(additional_coords))
-                if common_coords:
-                    return [np.mean(zip(*common_coords)[0]), np.mean(zip(*common_coords)[1])]
+                if additional_coords:
+                    return [min([(calculate_distance(c1[0], c1[1], c2[0], c2[1]), (c1[0], c1[1]))
+                                for c2 in additional_coords for c1 in coords], key=itemgetter(0))[1]]
                 return coords
