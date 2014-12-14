@@ -48,3 +48,18 @@ text = u'Dzwonię z Królewskiej obok Biprostalu'
 model_coords = (50.073073, 19.915252)
 
 test(text, model_coords)
+
+text = u'Jestem pomiędzy Politechniką a Galerią Krakowską'  #NER is needed...
+model_coords = (50.069489, 19.945056)
+
+test(text, model_coords)
+
+text = u'Wysiadłem obok Wawelu'
+model_coords = (50.053669, 19.936891)
+
+test(text, model_coords)
+
+text = u'Jestem w Biprostalu'
+model_coords = (50.0732415, 19.9153479)
+
+test(text, model_coords)
