@@ -15,7 +15,7 @@ def process(words, streets, places):
 
     if len(streets) >= 2:
         combinations = itertools.combinations(streets, 2)  # If there are more than a pair of streets, we should
-        # check all the combinations
+                                                           # check all the combinations
         for c in combinations:
             if c[0][2] < c[1][2]:
                 left = c[0][2] - shift
