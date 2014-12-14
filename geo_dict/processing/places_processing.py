@@ -32,13 +32,12 @@ def process(words, places):
         if left < 0:
             left = 0
 
-        if has_preposition(words[left:p[2]+shift], geo_relations_prepositions.relation_2):
+        if has_preposition(words[left:p[2]], geo_relations_prepositions.relation_2):
             coords = nodes_relations.relation_2.gis(p[0])
             if coords:
                 return coords
 
-    for p in places:
-        if has_preposition(words[left:p[2]+shift], geo_relations_prepositions.relation_1):
+        if has_preposition(words[left:p[2]], geo_relations_prepositions.relation_1):
             coords = nodes_relations.relation_1.gis(p[0])
             if coords:
                 return coords
