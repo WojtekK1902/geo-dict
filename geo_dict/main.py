@@ -38,3 +38,13 @@ text = u'Czekam przy Czarnowiejskiej obok AGH'
 model_coords = (50.066275, 19.922667)
 
 test(text, model_coords)
+
+text = u'Czekam na Czarnowiejskiej obok AGH'
+model_coords = (50.066558, 19.922043)
+
+test(text, model_coords)
+
+text = u'Dzwonię z Królewskiej obok Biprostalu'
+model_coords = (50.073073, 19.915252)
+
+test(text, model_coords)
