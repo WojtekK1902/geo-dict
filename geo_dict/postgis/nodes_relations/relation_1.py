@@ -6,16 +6,16 @@ def gis(node_name):
 
     cur = conn.cursor()
 
-    cur.execute("""SELECT ST_AsText(geom) FROM nodes
-WHERE id IN (SELECT node_id FROM node_tags WHERE k LIKE 'name' AND lower(v) LIKE '""" + node_name.lower() + """')""")
+    cur.execute("SELECT ST_AsText(geom) FROM nodes WHERE id IN "
+                "(SELECT node_id FROM node_tags WHERE k LIKE 'name' AND lower(v) LIKE '{0}');".format(node_name))
 
     row = cur.fetchall()
     xs, ys = [], []
     for r in row:
-        cur.execute("""SELECT ST_X('""" + r[0] + """');""")
+        cur.execute("SELECT ST_X('{0}');".format(r[0]))
         x = cur.fetchone()[0]
         xs.append(float(x))
-        cur.execute("""SELECT ST_Y('""" + r[0] + """');""")
+        cur.execute("SELECT ST_Y('{0}');".format(r[0]))
         y = cur.fetchone()[0]
         ys.append(float(y))
 
