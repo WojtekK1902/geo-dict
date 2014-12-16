@@ -55,3 +55,6 @@ target/
 
 # PyCharm
 .idea/
+.vagrant/
+Vagrantfile
+ner/data/
