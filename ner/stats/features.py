@@ -9,11 +9,11 @@ logger = logging.getLogger('Features')
 features_cache = {}
 
 
-names_dict = generate.load_names_dict()
-surnames_dict = generate.load_surnames_dict()
-cities_dict = generate.load_cities_dict()
-countries_dict = generate.load_countries_dict()
-streets_dict = generate.load_streets_dict()
+# names_dict = generate.load_names_dict()
+# surnames_dict = generate.load_surnames_dict()
+# cities_dict = generate.load_cities_dict()
+# countries_dict = generate.load_countries_dict()
+# streets_dict = generate.load_streets_dict()
 
 infrequents = None
 
@@ -44,7 +44,8 @@ def sentence_beginning(T, S, i):
 
 @cachable
 def infrequent(T, S, i):
-    return gen_sjp_base(S[i]) in infrequents
+    return False
+    # return gen_sjp_base(S[i]) in infrequents
 
 
 @cachable
@@ -101,9 +102,10 @@ def prev_label(T, S, i):
     return T[i - 1]
 
 
-VALID_FEATURES = [current_word, prev_label, prev_word, suffix, capital, sentence_beginning, infrequent, in_names_dict,
-                  in_surnames_dict,
-                  in_cities_dict,
-                  in_countries_dict]
+VALID_FEATURES = [current_word, prev_label, prev_word, suffix, capital, sentence_beginning, infrequent]
+                  # in_names_dict,
+                  # in_surnames_dict,
+                  # in_cities_dict,
+                  # in_countries_dict]
 
 

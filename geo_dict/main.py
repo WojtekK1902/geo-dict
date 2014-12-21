@@ -1,12 +1,16 @@
 # coding=utf-8
-from geo_dict.processing.processing import process
+import re
+from geo_dict.processing import ner_processing
+# from geo_dict.processing.processing import process
 from geo_dict.common.distance import calculate_distance
 
 
 def test(text, model_coords):
-    coords = process(text)
+    # coords = process(text)
+    words = [w for w in re.findall(r'\w+', text, re.U)]
+    ner_processing.find_streets(words)
 
-    print min([(calculate_distance(model_coords[0], model_coords[1], c[0], c[1]), (c[0], c[1])) for c in coords])
+    # print min([(calculate_distance(model_coords[0], model_coords[1], c[0], c[1]), (c[0], c[1])) for c in coords])
 
 
 text = u'Opis problemu: skrzyżowanie Łukasińskiego i Huculskiej. Duża wyrwa w drodze.'

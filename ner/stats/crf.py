@@ -4,9 +4,11 @@ import logging
 import math
 import sys
 import time
+import geo_dict
 from ner.corpus.kpwr import load_kpwr_model
 
 import features
+from ner.corpus.nkjp import load_nkjp_model
 from ner.model.tagparser import TagNEParser
 from ner.model.types import filter_corpus, VALID_TYPES
 from ner.stats.coding import BOS, EOS, LabelException, get_BMEWOP_states, encode_BMEWOP, decode_BMEWOP
@@ -14,8 +16,10 @@ from ner.tools import score
 from ner.tools.io import save, load
 from ner.tools.stemmer import gen_sjp_base
 
+import geo_dict.main
 
-CRF_PATH = "../dane/model/crf_hmm.sav"
+
+CRF_PATH = "ner/data/model/crf.sav"
 
 LEARN_MAX_N = 50
 
@@ -122,6 +126,12 @@ class ConditionalRandomFiels(object):
         self.features_map = defaultdict(lambda: defaultdict(FeatureValSet))
 
         self.freq_dict = ZipfDict()
+
+    @staticmethod
+    def load_from_file(path=CRF_PATH):
+        model =  load(path)
+        features.infrequents = model.freq_dict.infrequents()
+        return model
 
     def learn(self, text_data):
 
@@ -350,6 +360,9 @@ class ConditionalRandomFiels(object):
 
         return v[last_state, EOS][1]
 
+
+
+
 def print_weights(features_map):
     for l in features_map:
         logger.info('Label: {}'.format(l))
@@ -491,9 +504,12 @@ def cross_validation(model):
 
 
 if __name__ == "__main__":
-    model = filter_corpus(load_kpwr_model())
+    # model = filter_corpus(load_kpwr_model())
     # model = load('../dane/model/temp_model.sav')
-    cross_validation(model)
+    # train(model)
     # train(model[:1])
     # cProfile.run('train(model[:5])')
     # test(model[11:20])
+    pass
+
+

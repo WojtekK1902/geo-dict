@@ -7,6 +7,7 @@ import time
 
 # from corpus.kpwr import load_kpwr_model
 # from model.ccl_writer import CCLNERWriter
+from ner.corpus.kpwr import load_kpwr_model
 from ner.corpus.nkjp import load_nkjp_model
 from ner.model.tagparser import TagNEParser
 from ner.model.types import VALID_TYPES, filter_corpus
@@ -197,6 +198,7 @@ class HiddenMarkovModel(object):
                            key=lambda x: -x[1])
 
 
+
         def reconstruct_labeling(i, k):
             label = []
 
@@ -212,6 +214,7 @@ class HiddenMarkovModel(object):
 
             labels = reconstruct_labeling(len(phrase) - 1, best_labeling[0])
             try:
+                # print labels
                 # validate_BMEWO(labels)
                 return labels
             except LabelException, e:

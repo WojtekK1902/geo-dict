@@ -2,9 +2,9 @@ import glob
 from ner.model.ccl_parser import CCLNERParser
 from ner.tools.io import save, load
 
-KPWR_CORPUS_PATH = "../dane/kpwr-1.1"
+KPWR_CORPUS_PATH = "ner/data/corpus/kpwr-1.1"
 
-KPWR_PICKLE_PATH = "../dane/kpwr.sav"
+KPWR_PICKLE_PATH = "ner/data/corpus/kpwr.sav"
 
 
 def load_kpwr_corpus():
