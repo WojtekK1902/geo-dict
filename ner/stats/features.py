@@ -1,7 +1,7 @@
 import logging
 
-from ner.dict import generate
-from ner.tools.stemmer import gen_sjp_base
+# from ner.dict import generate
+# from ner.tools.stemmer import gen_sjp_base
 
 
 logger = logging.getLogger('Features')
@@ -61,7 +61,8 @@ def suffix(T, S, i):
 
 def prev_word(T, S, i):
     if i > 0:
-        return gen_sjp_base(S[i - 1])
+        # return gen_sjp_base(S[i - 1])
+        return S[i-1]
     return None
 
 
@@ -95,7 +96,8 @@ def in_streets_dict(T, S, i):
 
 @cachable
 def current_word(T, S, i):
-    return gen_sjp_base(S[i])
+    # return gen_sjp_base(S[i])
+    return S[i]
 
 
 def prev_label(T, S, i):

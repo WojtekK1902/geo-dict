@@ -8,9 +8,9 @@ FORCE_NEW_MODEL = False
 
 BACKUP_PARTS = 100
 
-NKJP_CORPUS_PATH = "ner/data/corpus/nkjp"
+NKJP_CORPUS_PATH = "ner/data/raw/corpus/nkjp"
 
-NKJP_PICKLE_PATH = "ner/data/corpus/nkjp.sav"
+NKJP_PICKLE_PATH = "ner/data/bin/corpus/nkjp.sav"
 
 logger = logging.getLogger('nkjp')
 

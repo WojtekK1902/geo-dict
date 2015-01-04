@@ -3,8 +3,8 @@ from collections import Counter
 import struct
 from ner.dict import generate
 
-DICT_FILE = 'ner/data/dict/clp.sav'
-SUFF_FILE = 'ner/data/dict/suffixes.sav'
+DICT_FILE = 'ner/data/bin/dict/clp.sav'
+SUFF_FILE = 'ner/data/bin/dict/suffixes.sav'
 
 base_form_cache = {}
 

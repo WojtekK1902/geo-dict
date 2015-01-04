@@ -7,45 +7,35 @@ import time
 
 # from corpus.kpwr import load_kpwr_model
 # from model.ccl_writer import CCLNERWriter
-from ner.corpus.kpwr import load_kpwr_model
+# from ner.corpus.kpwr import load_kpwr_model
 from ner.corpus.nkjp import load_nkjp_model
 from ner.model.tagparser import TagNEParser
 from ner.model.types import VALID_TYPES, filter_corpus
 from ner.stats.coding import BOS, EOS, LabelException, get_BMEWOP_states, encode_BMEWOP, decode_BMEWOP
 from ner.tools import score
 from ner.tools.io import save, load
-from ner.tools.stemmer import gen_sjp_base
 
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO, format='%(message)s')
 
-HMM_PATH = "ner/data/model/hmm.sav"
+HMM_PATH = "ner/data/bin/model/hmm.sav"
 
 logger = logging.getLogger('HiddenMarkovModel')
 
 
 class HiddenMarkovModel(object):
-
-    def __init__(self, transitions=Counter(), emissions=Counter(), states=get_BMEWOP_states(VALID_TYPES),
-                 transition_factors={}, emission_factors={}, symbols=set(), hapax_logomena_distribution={}):
-        self.transitions = transitions
-        self.emissions = emissions
-        self.states = states
-        self.transition_factors = transition_factors
-        self.emission_factors = emission_factors
-        self.symbols = symbols
-        self.hapax_logomena_distribution = hapax_logomena_distribution
+    def __init__(self):
+        self.transitions = Counter()
+        self.emissions = Counter()
+        self.states = get_BMEWOP_states(VALID_TYPES)
+        self.transition_factors = {}
+        self.emission_factors = {}
+        self.symbols = set()
+        self.hapax_logomena_distribution = {}
 
     @staticmethod
     def load_from_file(path=HMM_PATH):
-        args = load(path)
-        return HiddenMarkovModel(*args)
-
-    def save(self, path=HMM_PATH):
-        to_save = (
-            self.transitions, self.emissions, self.states, self.transition_factors, self.emission_factors, self.symbols,
-            self.hapax_logomena_distribution)
-        save(to_save, path)
+        return load(path)
 
     def learn(self, text_data):
         for file, objects, phrases in text_data:
@@ -89,7 +79,8 @@ class HiddenMarkovModel(object):
         logger.debug('\nHMM learning complete!')
 
     def get_base(self, symbol):
-        return gen_sjp_base(symbol)
+        return symbol
+        # return gen_sjp_base(symbol)
 
     def emission_probability(self, symbol, label):
         return self.hapax_logomena_EP(self.get_base(symbol), label)
@@ -198,7 +189,6 @@ class HiddenMarkovModel(object):
                            key=lambda x: -x[1])
 
 
-
         def reconstruct_labeling(i, k):
             label = []
 
@@ -230,7 +220,7 @@ def train(model):
     hmm.learn(model)
     logger.info('training time: {}'.format(time.time() - previous_time))
 
-    hmm.save()
+    save(hmm, HMM_PATH)
 
     print '**Transitions***'
 
@@ -284,7 +274,7 @@ def test(model):
         #
         # # if len(t_found) == len(t_real) and len(t_real) > 1:
         # if model[i][0] == '../dane/kpwr-1.1/wikipedia/00100521.xml':
-        #     writer = CCLNERWriter('test.ccl')
+        # writer = CCLNERWriter('test.ccl')
         #     writer.write(model[i][2], matched_objects)
         #     exit(0)
 

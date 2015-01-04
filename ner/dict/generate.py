@@ -8,25 +8,25 @@ import re
 from ner.tools.io import load, save
 
 
-STREETS_SOURCE = "../dane/slowniki/ULIC.xml"
-STREETS_OUT = "../dane/slowniki/ulice.txt"
-STREETS_PICKLE = "../dane/slowniki/bin/ulice.sav"
+STREETS_SOURCE = "ner/data/raw/dict/ULIC.xml"
+STREETS_OUT = "ner/data/raw/dict/ulice.txt"
+STREETS_PICKLE = "ner/data/bin/dict/ulice.sav"
 
-CITIES_SOURCE = "../dane/slowniki/SIMC.xml"
-CITIES_OUT = "../dane/slowniki/miasta.txt"
-CITIES_ODM = "../dane/slowniki/miasta_odm2.txt"
-CITIES_PICKLE = "../dane/slowniki/bin/miasta.sav"
+CITIES_SOURCE = "ner/data/raw/dict/SIMC.xml"
+CITIES_OUT = "ner/data/raw/dict/miasta.txt"
+CITIES_ODM = "ner/data/raw/dict/miasta_odm2.txt"
+CITIES_PICKLE = "ner/data/bin/dict/miasta.sav"
 
-COUNTRIES_ODM = "../dane/slowniki/panstwa_odm.txt"
-COUNTRIES_PICKLE = "../dane/slowniki/bin/panstwa.sav"
+COUNTRIES_ODM = "ner/data/raw/dict/panstwa_odm.txt"
+COUNTRIES_PICKLE = "ner/data/bin/dict/panstwa.sav"
 
-NAMES_SOURCE = "../dane/slowniki/names.pl.infl.utf8.txt"
-NAMES_PICKLE = "../dane/slowniki/bin/imiona.sav"
+NAMES_SOURCE = "ner/data/raw/dict/names.pl.infl.utf8.txt"
+NAMES_PICKLE = "ner/data/bin/dict/imiona.sav"
 
-SURNAMES_SOURCE = "../dane/slowniki/surnames.pl.infl.utf8.txt"
-SURNAMES_PICKLE = "../dane/slowniki/bin/nazwiska.sav"
+SURNAMES_SOURCE = "ner/data/raw/dict/surnames.pl.infl.utf8.txt"
+SURNAMES_PICKLE = "ner/data/bin/dict/nazwiska.sav"
 
-SJP_PYDIC_PATH = "/home/sjp.pydic"
+SJP_PYDIC_PATH = "ner/data/bin/sjp.pydic"
 
 
 def gen_streets():

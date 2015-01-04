@@ -4,8 +4,8 @@ import logging
 import math
 import sys
 import time
-import geo_dict
-from ner.corpus.kpwr import load_kpwr_model
+
+# from ner.corpus.kpwr import load_kpwr_model
 
 import features
 from ner.corpus.nkjp import load_nkjp_model
@@ -16,10 +16,8 @@ from ner.tools import score
 from ner.tools.io import save, load
 from ner.tools.stemmer import gen_sjp_base
 
-import geo_dict.main
 
-
-CRF_PATH = "ner/data/model/crf.sav"
+CRF_PATH = "ner/data/bin/model/crf.sav"
 
 LEARN_MAX_N = 50
 
@@ -35,7 +33,8 @@ class ZipfDict:
         self.c = Counter()
 
     def update(self, words):
-        self.c.update([gen_sjp_base(w) for w in words])
+        # self.c.update([gen_sjp_base(w) for w in words])
+        self.c.update(words)
 
     def find_limit(self):
 
@@ -112,6 +111,8 @@ class FeatureValSet:
     def __str__(self):
         return self._val_to_weight.__str__()
 
+def feature_dict_generator():
+    return defaultdict(FeatureValSet)
 
 class ConditionalRandomFiels(object):
     def __init__(self):
@@ -123,7 +124,7 @@ class ConditionalRandomFiels(object):
         self.training_model = []
 
         self.features = []
-        self.features_map = defaultdict(lambda: defaultdict(FeatureValSet))
+        self.features_map = defaultdict(feature_dict_generator)
 
         self.freq_dict = ZipfDict()
 
@@ -259,7 +260,6 @@ class ConditionalRandomFiels(object):
         for f_dict in self.features_map.values():
             for f_set in f_dict.values():
                 f_set.change_to_average(t * len(self.training_model))
-
 
 
     def calculate_feature_val_sparse_matrix(self, states, symbols, f_index):
@@ -504,9 +504,9 @@ def cross_validation(model):
 
 
 if __name__ == "__main__":
-    # model = filter_corpus(load_kpwr_model())
+    model = filter_corpus(load_nkjp_model())
     # model = load('../dane/model/temp_model.sav')
-    # train(model)
+    train(model[:1])
     # train(model[:1])
     # cProfile.run('train(model[:5])')
     # test(model[11:20])
