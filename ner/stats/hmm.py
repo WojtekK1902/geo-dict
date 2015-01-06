@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import Counter, defaultdict
+import heapq
 from itertools import groupby
 import logging
 import sys
@@ -11,7 +12,7 @@ import time
 from ner.corpus.nkjp import load_nkjp_model
 from ner.model.tagparser import TagNEParser
 from ner.model.types import VALID_TYPES, filter_corpus
-from ner.stats.coding import BOS, EOS, LabelException, get_BMEWOP_states, encode_BMEWOP, decode_BMEWOP
+from ner.stats.coding import BOS, EOS, get_BMEWOP_states, encode_BMEWOP, decode_BMEWOP, validate_BMEWOP, LabelException
 from ner.tools import score
 from ner.tools.io import save, load
 
@@ -54,10 +55,13 @@ class HiddenMarkovModel(object):
                     phrase_objects = []
 
                 labels = encode_BMEWOP(phrase, phrase_objects)
-
-                # print phrase, phrase_objects
-                self.update_model(phrase, labels)
-                self.symbols.update(phrase)
+                try:
+                    validate_BMEWOP(labels)
+                    # print phrase, phrase_objects
+                    self.update_model(phrase, labels)
+                    self.symbols.update(phrase)
+                except LabelException, e:
+                    logger.warning(e.message)
 
         logger.debug('\n=== Stats for HMM ===\n')
         logger.debug('Symbols number: %i', len(self.symbols))
@@ -153,6 +157,7 @@ class HiddenMarkovModel(object):
     def update_model(self, phrase, labels):
         for i in range(len(phrase) + 1):
             self.transitions.update([(labels[i], labels[i + 1])])
+
             if i < len(phrase):
                 self.emissions.update([(self.get_base(phrase[i]), labels[i + 1])])
                 if phrase[i] == u'Polsce':
@@ -166,51 +171,69 @@ class HiddenMarkovModel(object):
             state_emissions = filter(lambda e: e[0][1] == state, self.emissions.most_common())
             self.emission_factors[state] = sum(e[1] for e in state_emissions)
 
-    def infer_labeling(self, phrase):
+
+    def compute_viterbi_probability(self, v, i, k, n_best, ek, phrase):
+        for l in self.states:
+            for j in range(len(v[(i - 1, l)])):
+                p, _, _ = v[(i - 1, l)][j]
+                new_p = p * self.transition_probability(l, k) * ek
+                if (i, k) not in v:
+                    v[(i, k)] = []
+                if new_p > 0:
+                    if len(v[(i, k)]) < n_best:
+                        heapq.heappush(v[(i, k)], (new_p, l, j))
+                    else:
+                        heapq.heappushpop(v[(i, k)], (new_p, l, j))
+
+    def infer_labeling(self, phrase, n_best=1):
         v = {}
         for k in self.states:
-            v[(-1, k)] = (0, None)
-            v[(-1, BOS)] = (1, None)
+            v[(-1, k)] = []
+            heapq.heappush(v[(-1, k)], (0, None, None))
+
+        v[(-1, BOS)] = []
+        heapq.heappush(v[(-1, BOS)], (1, None, None))
 
         for i in range(len(phrase)):
             logger.debug(phrase[i])
+
             for k in self.states:
                 logger.debug(k)
                 ek = self.emission_probability(phrase[i], k)
                 logger.debug('emission : e(%s), state %s: %s', phrase[i], k, ek)
 
-                l, p = max([(l, v[(i - 1, l)][0] * self.transition_probability(l, k)) for l in self.states],
-                           key=lambda x: x[1])
-                logger.debug('transition: %s -> %s : %s', l, k, p)
-                v[(i, k)] = (ek * p, l)
+                self.compute_viterbi_probability(v, i, k, n_best, ek, phrase)
+
+                # l, p = max([(l, v[(i - 1, l)][0] * self.transition_probability(l, k)) for l in self.states],
+                # key=lambda x: x[1])
+                # logger.debug('transition: %s -> %s : %s', l, k, p)
+                # v[(i, k)] = (ek * p, l)
                 # logger.debug('current k=%s : %s', k, label_paths[k])
 
-        labelings = sorted([(l, v[(len(phrase) - 1, l)][0] * self.transition_probability(l, EOS)) for l in self.states],
-                           key=lambda x: -x[1])
+        # labelings = sorted([(l, v[(len(phrase) - 1, l)][0] * self.transition_probability(l, EOS)) for l in self.states],
+        # key=lambda x: -x[1])
 
+        self.compute_viterbi_probability(v, len(phrase), EOS, n_best, 1, phrase)
 
-        def reconstruct_labeling(i, k):
-            label = []
-
+        labelings = []
+        for p, l, prev_l in v[(len(phrase), EOS)]:
+            label = [EOS]
+            i = len(phrase) - 1
             while i >= -1:
-                label.append(k)
-                k = v[(i, k)][1]
+                label.append(l)
+                _, l, prev_l = v[(i, l)][prev_l]
                 i -= 1
 
-            return list(reversed(label))
+            labelings.append((list(reversed(label)), p))
+
+        return labelings
 
 
-        for best_labeling in labelings:
+    def get_best_labeling(self, phrase, phrase_no=0):
+        return self.get_best_labelings(phrase, 1, phrase_no)[0]
 
-            labels = reconstruct_labeling(len(phrase) - 1, best_labeling[0])
-            try:
-                # print labels
-                # validate_BMEWO(labels)
-                return labels
-            except LabelException, e:
-                logger.error(e)
-
-        return ['W-O' for _ in range(len(phrase))]
+    def get_best_labelings(self, phrase, N, phrase_no=0):
+        return [(decode_BMEWOP(phrase_no, label), p) for label, p in self.infer_labeling(phrase, N)]
 
 
 def train(model):
@@ -275,8 +298,8 @@ def test(model):
         # # if len(t_found) == len(t_real) and len(t_real) > 1:
         # if model[i][0] == '../dane/kpwr-1.1/wikipedia/00100521.xml':
         # writer = CCLNERWriter('test.ccl')
-        #     writer.write(model[i][2], matched_objects)
-        #     exit(0)
+        # writer.write(model[i][2], matched_objects)
+        # exit(0)
 
     print '\n==== Global results ====\n'
     score.print_metrics_map(global_metrics)

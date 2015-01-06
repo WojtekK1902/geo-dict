@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs
+from collections import defaultdict
 from xml.etree.ElementTree import iterparse
 from pydic import PyDic
 import marisa_trie
@@ -7,6 +8,8 @@ import re
 
 from ner.tools.io import load, save
 
+STREETS_CRACOW_SOURCE = "ner/data/raw/dict/streets_krk.txt"
+STREETS_CRACOW_PICKLE = "ner/data/bin/dict/streets_krk.sav"
 
 STREETS_SOURCE = "ner/data/raw/dict/ULIC.xml"
 STREETS_OUT = "ner/data/raw/dict/ulice.txt"
@@ -27,6 +30,15 @@ SURNAMES_SOURCE = "ner/data/raw/dict/surnames.pl.infl.utf8.txt"
 SURNAMES_PICKLE = "ner/data/bin/dict/nazwiska.sav"
 
 SJP_PYDIC_PATH = "ner/data/bin/sjp.pydic"
+
+def gen_streets_cracow():
+    streets = defaultdict(list)
+    with codecs.open(STREETS_CRACOW_SOURCE, "r", encoding="utf-8") as f:
+        for line in f.readlines():
+            for entry in line.split(';'):
+                words = re.split('\s|-', entry)
+                streets[words[0]].append(words)
+    save(streets, STREETS_CRACOW_PICKLE)
 
 
 def gen_streets():
@@ -94,6 +106,9 @@ def load_countries_dict():
 def load_streets_dict():
     return load(STREETS_PICKLE)
 
+def load_streets_cracow_dict():
+    return load(STREETS_CRACOW_PICKLE)
+
 
 sjp_dic = None
 def get_sjp_pydic():
@@ -109,6 +124,7 @@ def normalize(string):
 if __name__ == "__main__":
     #gen_cities()
     #gen_streets()
+    # gen_streets_cracow()
     # pickle_dict(STREETS_OUT, STREETS_PICKLE)
     # pickle_dict(CITIES_ODM, CITIES_PICKLE)
     #pickle_dict(NAMES_SOURCE, NAMES_PICKLE)
@@ -117,6 +133,6 @@ if __name__ == "__main__":
     #gen_model(load_kpwr_corpus, KPWR_PICKLE_PATH)
 
 
-
-    c = load(STREETS_PICKLE)
-    print u'Żółkiewskiego' in c
+    c = load(STREETS_CRACOW_PICKLE)
+    print u'Aleja' in c
+    print c[u'Aleja']

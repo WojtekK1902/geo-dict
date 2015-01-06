@@ -5,7 +5,7 @@ from ner.stats.hmm import train
 if __name__ == "__main__":
     model = filter_corpus(load_nkjp_model())
     # model = load('../dane/model/temp_model.sav')
-    train(model[:1])
+    train(model)
     # train(model[:1])
     # cProfile.run('train(model[:5])')
     # test(model[11:20])
